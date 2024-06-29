@@ -9,4 +9,6 @@ public class ChatCloneDatabaseSettings
     public string ChatsCollectionName { get; set; } = null!;
     
     public string GroupChatCollectionName { get; set; } = null!;
+    
+    public string MessagesCollectionName { get; set; } = null!;
 }

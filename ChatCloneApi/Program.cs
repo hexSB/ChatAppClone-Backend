@@ -45,7 +45,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: MyAllowSpecificOrigins,
         policy  =>
         {
-            policy.WithOrigins("http://127.0.0.1:5173").AllowAnyHeader().AllowAnyMethod().AllowCredentials();
+            policy.WithOrigins("http://localhost:5173/", "https://localhost:5173/", "http://localhost:5173").AllowAnyHeader().AllowAnyMethod().AllowCredentials(); //"http://127.0.0.1:5173
         });
 });
 
@@ -53,13 +53,16 @@ builder.Services.Configure<ChatCloneDatabaseSettings>(builder.Configuration.GetS
 builder.Services.AddSingleton<ChatService>();
 builder.Services.AddSingleton<GroupService>();
 
+
 builder.Services.AddSingleton<IDictionary<string, UserConnection>>(opts => new Dictionary<string, UserConnection>());
 
 
 builder.Services.AddSignalR();
 
 
+
 var app = builder.Build();
+app.UseCors(MyAllowSpecificOrigins);
 
 if (app.Environment.IsDevelopment())
 {
@@ -68,7 +71,6 @@ if (app.Environment.IsDevelopment())
 }
 
 
-app.UseCors(MyAllowSpecificOrigins);
 
 app.UseHttpsRedirection();
 
@@ -76,9 +78,10 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 
-app.MapHub<ChatHub>("/Chat");
+
 
 
 app.MapGet("/", () => "Hello World!");
 app.MapControllers();
+app.MapHub<ChatHub>("/Chat");
 app.Run();

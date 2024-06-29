@@ -30,8 +30,7 @@
       "commandName": "IISExpress",
       "launchBrowser": true,
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "MongoDBConnectionString": "MONGO_URI"
+        "ASPNETCORE_ENVIRONMENT": "Development"
       }
     }
   }

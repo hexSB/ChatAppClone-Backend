@@ -16,10 +16,23 @@ public class ChatService
         
         var mongoDatabase = mongoClient.GetDatabase(chatCloneDatabaseSettings.Value.DatabaseName);
         
-        _chatCollection = mongoDatabase.GetCollection<Chat>(chatCloneDatabaseSettings.Value.ChatsCollectionName);
+        _chatCollection = mongoDatabase.GetCollection<Chat>(chatCloneDatabaseSettings.Value.MessagesCollectionName);
     }
     
     public async Task<List<Chat>> GetAsync() => await _chatCollection.Find(chat => true).ToListAsync();
     
-    public async Task CreateAsync(Chat newChat) => await _chatCollection.InsertOneAsync(newChat);
+    public async Task CreateAsync(Chat newMessage) => await _chatCollection.InsertOneAsync(newMessage);
+    
+    public async Task<List<Chat>> GetByIdAsync(string groupID)
+    {
+        return await _chatCollection.Find(chat => chat.GroupId == groupID).ToListAsync();
+    }
 }
+
+
+    
+
+
+
+
+

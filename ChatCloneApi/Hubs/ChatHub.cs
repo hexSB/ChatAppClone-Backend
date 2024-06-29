@@ -42,7 +42,7 @@ public class ChatHub : Hub
 
     public async Task SendMessage(string message)
     {
-        if(_connections.TryGetValue(Context.ConnectionId, out var userConnection))
+        if(_connections.TryGetValue(Context.ConnectionId, out UserConnection userConnection))
         {
             await Clients.Group(userConnection.groupId).SendAsync("ReceiveMessage", userConnection.User, message);
         }

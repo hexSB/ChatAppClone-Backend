@@ -1,4 +1,5 @@
-﻿using ChatCloneApi.Models;
+﻿using System.Globalization;
+using ChatCloneApi.Models;
 using ChatCloneApi.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -18,13 +19,28 @@ public class ChatController : ControllerBase
         _chatService = chatService;
     }
     
-    [HttpGet]
-    public async Task<List<Chat>> Get() => await _chatService.GetAsync();
+
+    
+    [HttpGet("id/{id:length(24)}")]
+    public async Task<ActionResult<Chat>> GetById(string id)
+    {
+        var message = await _chatService.GetByIdAsync(id);
+
+        if (message == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(message);
+    }
     
     [HttpPost]
-    public async Task<IActionResult> Post(Chat newChat)
+    public async Task<IActionResult> Post(Chat message)
     {
-        await _chatService.CreateAsync(newChat);
-        return CreatedAtAction(nameof(Get), new { id = newChat.Id }, newChat);
+        var date = DateTime.Now;
+        var formattedDate = date.ToString("MM-dd-yyyy HH:mm");
+        message.Timestamp = formattedDate;
+        await _chatService.CreateAsync(message);
+        return CreatedAtAction(nameof(GetById), new { id = message.Id }, message);
     }
 }
