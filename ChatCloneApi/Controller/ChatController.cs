@@ -43,4 +43,15 @@ public class ChatController : ControllerBase
         await _chatService.CreateAsync(message);
         return CreatedAtAction(nameof(GetById), new { id = message.Id }, message);
     }
+    
+    //Test API
+    [HttpGet("test")]
+    public IActionResult Test()
+    {
+        return Ok(new
+        {
+            Message = "Hello from a  endpoint!"
+        });
+    }
+    
 }
