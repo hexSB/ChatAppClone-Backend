@@ -77,11 +77,9 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
-
-
-
-
 app.MapGet("/", () => "Hello World!");
+
+
 app.MapControllers();
 app.MapHub<ChatHub>("/Chat");
 app.Run();

@@ -10,8 +10,19 @@ public class GroupService
     
     public GroupService(IOptions<ChatCloneDatabaseSettings> chatCloneDatabaseSettings)
     {
-        
-        var mongoClient = new MongoClient(chatCloneDatabaseSettings.Value.ConnectionString);
+        MongoClient mongoClient;
+        string connectSecret = Environment.GetEnvironmentVariable("Connect_Secret");
+
+        if (string.IsNullOrEmpty(connectSecret))
+        {
+            mongoClient = new MongoClient(chatCloneDatabaseSettings.Value.ConnectionString);
+        }
+        else
+        {
+            mongoClient = new MongoClient(connectSecret);
+        }
+
+
         
         var mongoDatabase = mongoClient.GetDatabase(chatCloneDatabaseSettings.Value.DatabaseName);
         
