@@ -40,12 +40,27 @@ builder.Services.AddSwaggerGen();
 
 //builder.Services.AddAuthentication().AddJwtBearer();
 
+
+var frontendUrl = Environment.GetEnvironmentVariable("FRONTEND_URL");
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: MyAllowSpecificOrigins,
         policy  =>
         {
-            policy.WithOrigins("http://localhost:5173/", "https://localhost:5173/", "http://localhost:5173").AllowAnyHeader().AllowAnyMethod().AllowCredentials(); //"http://127.0.0.1:5173
+            var origins = new List<string>
+            {
+                "http://localhost:5173/",
+                "https://localhost:5173/",
+                "http://localhost:5173"
+            };
+            
+            if (!string.IsNullOrEmpty(frontendUrl))
+            {
+                origins.Add(frontendUrl);
+            }
+
+            policy.WithOrigins(origins.ToArray()).AllowAnyHeader().AllowAnyMethod().AllowCredentials();
         });
 });
 
@@ -76,6 +91,8 @@ app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+
 
 app.MapGet("/", () => "Hello World!");
 
