@@ -54,6 +54,32 @@ public class GroupController : ControllerBase
         return group;
     }
     
+    [HttpPost("leave/{id:length(24)}")]
+    public async Task<ActionResult<Group>> Remove(string id)
+    {
+        var group = await _groupService.GetAsync(id);
+        
+        if (group is null)
+        {
+            return NotFound();
+        }
+        var userId = User.Identity.Name;
+
+        if (group.MembersId.Contains(userId))
+        {
+            group.MembersId.Remove(userId);
+            await _groupService.UpdateAsync(id, group);
+        }
+
+        else
+        {
+            return NotFound("Not in group");
+        }
+
+        return group;
+    }
+
+    
     [HttpPost]
     public async Task<IActionResult> Post(Group newGroup)
     {
