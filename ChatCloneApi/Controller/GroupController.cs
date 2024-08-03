@@ -54,7 +54,7 @@ public class GroupController : ControllerBase
         return group;
     }
     
-    [HttpPost("leave/{id:length(24)}")]
+    [HttpGet("leave/{id:length(24)}")]
     public async Task<ActionResult<Group>> Remove(string id)
     {
         var group = await _groupService.GetAsync(id);
